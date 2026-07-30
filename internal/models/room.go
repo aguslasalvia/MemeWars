@@ -1,12 +1,14 @@
 package models
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 type Room struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	State     string    `json:"state"`
-	CreatedOn time.Time `json:"created_on"`
+	gorm.Model
+	Name   string `json:"name"`
+	Active bool   `json:"active"`
+	Memes  []Meme `json:"memes,omitempty" gorm:"foreignKey:RoomID"`
 }
 
 type CreateRoomRequest struct {

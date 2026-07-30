@@ -1,8 +1,14 @@
 package models
 
+import "gorm.io/gorm"
+
 type Vote struct {
-	ID     string `json:"id"`
-	MemeID string `json:"meme_id"`
-	UserID string `json:"user_id"`
-	Value  int    `json:"vote"`
+	gorm.Model
+	MemeID uint `json:"meme_id"`
+	Meme   Meme `json:"-" gorm:"foreignKey:MemeID"`
+
+	UserID uint `json:"user_id"`
+	User   User `json:"-" gorm:"foreignKey:UserID"`
+
+	Value int `json:"value"`
 }

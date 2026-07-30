@@ -14,5 +14,10 @@ func SetupRoutes() *gin.Engine {
 		AllowHeaders: []string{"Content-Type", "Authorization"},
 	}))
 
+	group := r.Group("/api/v1")
+	{
+		RoomRoutes(group)
+	}
+
 	return r
 }

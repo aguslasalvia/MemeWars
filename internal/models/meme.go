@@ -1,12 +1,17 @@
 package models
 
-import "time"
+import "gorm.io/gorm"
 
 type Meme struct {
-	ID        string    `json:"id"`
-	RoomID    string    `json:"room_id"`
-	UserID    string    `json:"user_id"`
-	ImageURL  string    `json:"image_url"`
-	Text      string    `json:"text,omitempty"`
-	CreatedOn time.Time `json:"created_on"`
+	gorm.Model
+	UserID uint `json:"user_id"`
+	User   User `json:"user,omitempty" gorm:"foreignKey:UserID"`
+
+	RoomID uint `json:"room_id"`
+	Room   Room `json:"room" gorm:"foreignKey:RoomID"`
+
+	ImageURL string `json:"image_url"`
+	Text     string `json:"text"`
+
+	Votes []Vote `json:"votes,omitempty" gorm:"foreignKey:MemeID"`
 }

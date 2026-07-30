@@ -4,6 +4,7 @@ import (
 	"memewars/internal/models"
 	"memewars/internal/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +32,21 @@ func (rh *roomHandler) CreateRoom(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, room)
 }
 
-func (rh *roomHandler) GetRoom() {
+func (rh *roomHandler) GetRoom(ctx *gin.Context) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+
+	if string(id) == "" || id == 0 || err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "No room ID provided"})
+		return
+	}
+
+	room, err := rh.service.GetRoom(int(id))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Resource not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, room)
 
 }
 
