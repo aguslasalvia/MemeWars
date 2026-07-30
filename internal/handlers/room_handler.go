@@ -35,7 +35,7 @@ func (rh *roomHandler) CreateRoom(ctx *gin.Context) {
 func (rh *roomHandler) GetRoom(ctx *gin.Context) {
 	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 
-	if string(id) == "" || id == 0 || err != nil {
+	if ctx.Param("id") == "" || id == 0 || err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "No room ID provided"})
 		return
 	}

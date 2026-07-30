@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RoomRoutes(r *gin.RouterGroup) {
-	h := handlers.RoomHandler()
-	rooms := r.Group("/rooms")
+func UserRoutes(r *gin.RouterGroup) {
+	h := handlers.UserHandler()
+	users := r.Group("/users")
 	{
-		rooms.POST("", h.CreateRoom)
-		rooms.GET("/:id", h.GetRoom)
+		users.POST("", h.Create)
+		users.GET("/:name", h.GetUserByName)
 	}
 }

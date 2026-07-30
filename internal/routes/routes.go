@@ -17,6 +17,7 @@ func SetupRoutes() *gin.Engine {
 	group := r.Group("/api/v1")
 	{
 		RoomRoutes(group)
+		UserRoutes(group)
 	}
 
 	return r
