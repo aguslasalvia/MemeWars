@@ -21,7 +21,7 @@ func (us *UserService) Create(u *models.User) (*models.User, error) {
 
 func (us *UserService) GetUserByName(name string) (*models.User, error) {
 	var u models.User
-	if err := db.DB.First(&u, name).Error; err != nil {
+	if err := db.DB.Where("name = ?", name).First(&u).Error; err != nil {
 		return nil, err
 	}
 

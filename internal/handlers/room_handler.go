@@ -14,7 +14,7 @@ type roomHandler struct {
 }
 
 func RoomHandler() *roomHandler {
-	return &roomHandler{}
+	return &roomHandler{service: &services.RoomService{}}
 }
 
 func (rh *roomHandler) CreateRoom(ctx *gin.Context) {
