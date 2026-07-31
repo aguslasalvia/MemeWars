@@ -27,6 +27,7 @@ func (rh *roomHandler) CreateRoom(ctx *gin.Context) {
 	room, err := rh.service.CreateRoom(req.Name)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error creating a room"})
+		return
 	}
 
 	ctx.JSON(http.StatusCreated, room)
