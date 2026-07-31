@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"memewars/internal/handlers"
+	// "memewars/internal/handlers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func VoteRoutes(r *gin.RouterGroup) {
-	h := handlers.VoteHanlder()
+	// h := handlers.VoteHanlder()
 }
