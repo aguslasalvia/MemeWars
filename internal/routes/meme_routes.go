@@ -7,9 +7,10 @@ import (
 )
 
 func MemeRoutes(r *gin.RouterGroup) {
-	// h := handlers.MemeHandler()
+	h := handlers.MemeHandler()
 	memes := r.Group("/memes")
 	{
-		memes.GET("/:room/:meme_id", handlers.MemeHandler().GetMemeFromRoom)
+		memes.GET("/:room/:meme_id", h.GetMemeFromRoom)
+		memes.GET("/:room_id",h.GetMemesFromRoom)
 	}
 }

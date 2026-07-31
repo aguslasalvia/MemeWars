@@ -18,6 +18,7 @@ func SetupRoutes() *gin.Engine {
 	{
 		RoomRoutes(group)
 		UserRoutes(group)
+		MemeRoutes(group)
 	}
 
 	return r

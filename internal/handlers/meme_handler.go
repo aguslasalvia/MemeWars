@@ -18,17 +18,17 @@ func MemeHandler() *memeHandler {
 
 func (mh *memeHandler) GetMemeFromRoom(ctx *gin.Context) {
 
-	roomP := ctx.Param("room_id")
-	memeP := ctx.Param("room_id")
+	roomParam := ctx.Param("room_id")
+	memeParam := ctx.Param("room_id")
 
-	if roomP == "" || memeP == "" {
+	if roomParam == "" || memeParam == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "RoomID and MemeID must be provided"})
 	}
 
-	roomID, room_err := strconv.ParseUint(roomP, 10, 32)
-	memeID, meme_err := strconv.ParseUint(memeP, 10, 32)
+	roomID, roomErr := strconv.ParseUint(roomParam, 10, 32)
+	memeID, memeErr := strconv.ParseUint(memeParam, 10, 32)
 
-	if room_err != nil || meme_err != nil {
+	if roomErr != nil || memeErr != nil {
 		ctx.JSON(http.StatusInternalServerError, nil)
 	}
 
@@ -40,4 +40,20 @@ func (mh *memeHandler) GetMemeFromRoom(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, m)
 
+}
+
+func (mh *memeHandler) GetMemesFromRoom(ctx *gin.Context) {
+	roomParam := ctx.Param("room_id")
+
+	if roomParam == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "RoomID must be provided"})
+	}
+
+	roomID, roomErr := strconv.ParseUint(roomParam, 10, 32)
+	if roomErr != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": roomErr})
+	}
+
+	ms := mh.service.FindAllMemesFromRoom(uint(roomID))
+	ctx.JSON(http.StatusOK, ms)
 }
