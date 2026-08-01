@@ -10,7 +10,7 @@ type RoomService struct{}
 
 func (rs *RoomService) CreateRoom(name string) (*models.Room, error) {
 	if name == "" {
-		return nil, errors.New("Room name is emptys")
+		return nil, errors.New("Room name is empty")
 	}
 
 	room := models.Room{
