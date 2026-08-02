@@ -22,13 +22,13 @@ func (vh *voteHandler) Create(ctx *gin.Context) {
 	var req models.Vote
 
 	if err := ctx.ShouldBindBodyWithJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	v, err := vh.service.GiveVoteToMeme(&req)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

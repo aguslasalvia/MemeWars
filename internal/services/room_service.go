@@ -40,7 +40,7 @@ func (rs *RoomService) UploadMeme() {
 }
 
 func (rs *RoomService) GetRanking(roomID uint) ([]models.RankingEntry, error) {
-	var results []models.RankingEntry
+	results := []models.RankingEntry{}
 
 	err := db.DB.
 		Table("memes").

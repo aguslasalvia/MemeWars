@@ -14,11 +14,14 @@ func SetupRoutes() *gin.Engine {
 		AllowHeaders: []string{"Content-Type", "Authorization"},
 	}))
 
+	r.Static("/static", "./static")
+
 	group := r.Group("/api/v1")
 	{
 		RoomRoutes(group)
 		UserRoutes(group)
 		MemeRoutes(group)
+		VoteRoutes(group)
 	}
 
 	return r

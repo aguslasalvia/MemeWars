@@ -15,9 +15,10 @@ func (vs *VoteService) GiveVoteToMeme(vote *models.Vote) (*models.Vote, error) {
 	}
 
 	var eVote models.Vote
-	if err := db.DB.
+	err := db.DB.
 		Where("meme_id = ? AND user_id = ?", vote.MemeID, vote.UserID).
-		First(&eVote).Error; err != nil {
+		First(&eVote).Error
+	if err == nil {
 		return nil, errors.New("Vote already set")
 	}
 
