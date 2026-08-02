@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"mime/multipart"
+
+	"gorm.io/gorm"
+)
 
 type Meme struct {
 	gorm.Model
@@ -14,4 +18,10 @@ type Meme struct {
 	Text     string `json:"text"`
 
 	Votes []Vote `json:"votes,omitempty" gorm:"foreignKey:MemeID"`
+}
+
+type CreateMemeRequest struct {
+	UserID uint                  `form:"user_id" binding:"required"`
+	Text   string                `form:"text"`
+	Image  *multipart.FileHeader `form:"image" binding:"required"`
 }

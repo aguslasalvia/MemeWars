@@ -39,6 +39,21 @@ func (rs *RoomService) UploadMeme() {
 
 }
 
-func (rs *RoomService) GetRanking() {
+func (rs *RoomService) GetRanking(roomID uint) ([]models.RankingEntry, error) {
+	var results []models.RankingEntry
 
+	err := db.DB.
+		Table("memes").
+		Select("memes.id as meme_id, memes.image_url, memes.text, COALESCE(SUM(votes.value), 0) as total_votes").
+		Joins("LEFT JOIN votes ON votes.meme_id = memes.id").
+		Where("memes.room_id = ?", roomID).
+		Group("memes.id").
+		Order("total_votes desc").
+		Scan(&results).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }

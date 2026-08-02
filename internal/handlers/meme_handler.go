@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"memewars/internal/models"
 	"memewars/internal/services"
 	"net/http"
 	"strconv"
@@ -16,6 +17,29 @@ func MemeHandler() *memeHandler {
 	return &memeHandler{
 		service: &services.MemeService{},
 	}
+}
+
+func (mh *memeHandler) UploadMeme(ctx *gin.Context) {
+	roomID, err := strconv.ParseUint(ctx.Param("room_id"), 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid room id"})
+		return
+	}
+
+	var req models.CreateMemeRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	meme, err := mh.service.CreateMeme(uint(roomID), req.UserID, req.Text, req.Image)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, meme)
+
 }
 
 func (mh *memeHandler) GetMemeFromRoom(ctx *gin.Context) {

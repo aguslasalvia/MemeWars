@@ -51,10 +51,20 @@ func (rh *roomHandler) GetRoom(ctx *gin.Context) {
 
 }
 
-func (rh *roomHandler) UploadMeme() {
 
-}
 
-func (rh *roomHandler) GetRanking() {
+func (rh *roomHandler) GetRanking(ctx *gin.Context) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid room id"})
+		return
+	}
 
+	ranking, err := rh.service.GetRanking(uint(id))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, ranking)
 }

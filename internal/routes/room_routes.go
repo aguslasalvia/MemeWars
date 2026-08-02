@@ -12,6 +12,6 @@ func RoomRoutes(r *gin.RouterGroup) {
 	{
 		rooms.POST("", h.CreateRoom)
 		rooms.GET("/:id", h.GetRoom)
-
+		rooms.GET("/:id/ranking", h.GetRanking)
 	}
 }
