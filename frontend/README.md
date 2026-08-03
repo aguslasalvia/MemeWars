@@ -1,16 +1,48 @@
-# React + Vite
+# MemeWars — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SPA en React + TypeScript (Vite) para MemeWars: crear/entrar a salas, subir memes, votar y ver el ranking.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 + React Router
+- Vite 8 (build)
+- Bun como package manager
 
-## React Compiler
+## Estructura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+src/
+  api.ts              cliente HTTP hacia el backend (VITE_API_URL, default http://localhost:4040/api/v1)
+  App.tsx              rutas de la app
+  pages/                EntryPage, LobbyPage, RoomPage, RankingPage
+  components/           MemeCard, etc.
+  types.ts              tipos compartidos
+```
 
-## Expanding the ESLint configuration
+## Desarrollo
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+bun install
+bun run dev
+```
+
+Por default pega contra `http://localhost:4040/api/v1`. Para apuntar a otro backend, crear un `.env` con:
+
+```
+VITE_API_URL=http://localhost:4040/api/v1
+```
+
+## Build
+
+```bash
+bun run build
+```
+
+El output va a `../static/dist` (configurado en `vite.config.ts`), que es la carpeta que sirve el backend Go — ver [`../README.md`](../README.md) para cómo levantar todo junto.
+
+## Otros comandos
+
+```bash
+bun run lint      # eslint
+bun run preview   # sirve el build de forma local, sin el backend Go
+```
