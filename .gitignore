@@ -4,3 +4,4 @@
 *.db
 **/*.env
 static/memes/
+static/dist/
