@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import { getRanking, imageUrl } from "../api.ts";
 import type { RankingEntry } from "../types";
 
@@ -8,14 +9,13 @@ const MEDAL_CLASSES = ["medal-gold", "medal-silver", "medal-bronze"];
 function RankingPage() {
   const { roomId } = useParams();
   const [ranking, setRanking] = useState<RankingEntry[]>([]);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!roomId) return;
     getRanking(roomId)
       .then(setRanking)
-      .catch((err) => setError(err instanceof Error ? err.message : "No se pudo cargar el ranking"))
+      .catch((err) => toast.error(err instanceof Error ? err.message : "No se pudo cargar el ranking"))
       .finally(() => setLoading(false));
   }, [roomId]);
 
@@ -40,7 +40,6 @@ function RankingPage() {
         </div>
       </header>
 
-      {error && <p className="error-text">{error}</p>}
       {!loading && ranking.length === 0 && <p className="subtitle">Todavia no hay memes en esta sala.</p>}
 
       <div className="podium">

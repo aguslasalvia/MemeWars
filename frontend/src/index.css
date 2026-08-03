@@ -148,13 +148,6 @@ a {
   margin: 8px 0 0;
 }
 
-.error-text {
-  color: var(--hot);
-  font-weight: 700;
-  font-size: 14px;
-  margin: 0;
-}
-
 /* ---- Entry page ---- */
 
 .entry-card {

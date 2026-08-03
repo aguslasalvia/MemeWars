@@ -26,7 +26,7 @@ func (uh *userHandler) Create(ctx *gin.Context) {
 	us, err := uh.service.Create(&req)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -43,7 +43,7 @@ func (uh *userHandler) GetUserByName(ctx *gin.Context) {
 
 	u, err := uh.service.GetUserByName(name)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return

@@ -45,15 +45,18 @@ Variables de entorno (`.env` en la raíz, opcional):
 
 ## Build para producción
 
-El server sirve el frontend compilado, así que hay que buildear antes de levantar el binario:
+```bash
+make build
+```
+
+Esto buildea el frontend, compila el binario en `bin/memewars` y copia `static/dist` a `bin/static/dist` (más una carpeta vacía `bin/static/memes`), para que `bin/` quede autocontenida:
 
 ```bash
-cd frontend && bun install && bun run build && cd ..
-go build -o memewars ./cmd/server
+cd bin
 ./memewars
 ```
 
-`bun run build` deja el output en `static/dist`, que Gin sirve en `/`, `/assets` y `/favicon.svg`, con fallback SPA para rutas del cliente (ej. `/room/1`).
+Gin sirve el build del frontend en `/`, `/assets` y `/favicon.svg`, con fallback SPA para rutas del cliente (ej. `/room/1`). `bin/` está en `.gitignore` — se regenera con `make build` (o `make clean` para borrarla).
 
 ## API (`/api/v1`)
 

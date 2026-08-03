@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import { getRoom, getRanking, uploadMeme, voteMeme } from "../api.ts";
 import MemeCard from "../components/MemeCard.tsx";
 import type { Room, User } from "../types";
@@ -15,7 +16,6 @@ function RoomPage({ user }: RoomPageProps) {
   const [room, setRoom] = useState<Room | null>(null);
   const [votesByMeme, setVotesByMeme] = useState<Record<number, number>>({});
   const [votedMemeIds, setVotedMemeIds] = useState<Set<number>>(new Set());
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const [showUploadForm, setShowUploadForm] = useState(false);
@@ -51,7 +51,7 @@ function RoomPage({ user }: RoomPageProps) {
         setVotesByMeme(voteMap);
       })
       .catch((err) => {
-        if (!ignore) setError(err instanceof Error ? err.message : "No se pudo cargar la sala");
+        if (!ignore) toast.error(err instanceof Error ? err.message : "No se pudo cargar la sala");
       })
       .finally(() => {
         if (!ignore) setLoading(false);
@@ -69,19 +69,18 @@ function RoomPage({ user }: RoomPageProps) {
       setRoom(roomData);
       setVotesByMeme(voteMap);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo cargar la sala");
+      toast.error(err instanceof Error ? err.message : "No se pudo cargar la sala");
     }
   }
 
   async function handleVote(memeId: number) {
     if (!user) return;
-    setError("");
     try {
       await voteMeme(memeId, user.ID);
       setVotedMemeIds((prev) => new Set(prev).add(memeId));
       await reloadRoom();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo votar");
+      toast.error(err instanceof Error ? err.message : "No se pudo votar");
     }
   }
 
@@ -89,20 +88,20 @@ function RoomPage({ user }: RoomPageProps) {
     event.preventDefault();
     if (!user || !roomId) return;
     if (!uploadFile) {
-      setError("Elegi una imagen para subir");
+      toast.error("Elegi una imagen para subir");
       return;
     }
 
     setUploading(true);
-    setError("");
     try {
       await uploadMeme(roomId, user.ID, uploadText.trim(), uploadFile);
       setUploadText("");
       setUploadFile(null);
       setShowUploadForm(false);
+      toast.success("Meme subido al campo de batalla");
       await reloadRoom();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir el meme");
+      toast.error(err instanceof Error ? err.message : "No se pudo subir el meme");
     } finally {
       setUploading(false);
     }
@@ -113,7 +112,7 @@ function RoomPage({ user }: RoomPageProps) {
   }
 
   if (!room) {
-    return <div className="page-center">{error || "No encontramos esta sala"}</div>;
+    return <div className="page-center">No encontramos esta sala</div>;
   }
 
   return (
@@ -132,8 +131,6 @@ function RoomPage({ user }: RoomPageProps) {
           </Link>
         </div>
       </header>
-
-      {error && <p className="error-text">{error}</p>}
 
       <div className="meme-grid">
         {room.memes?.map((meme) => (

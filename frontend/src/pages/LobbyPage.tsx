@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { createRoom, getRoom } from "../api.ts";
 import type { User } from "../types";
 
@@ -11,7 +12,6 @@ interface LobbyPageProps {
 function LobbyPage({ user, onLogout }: LobbyPageProps) {
   const [roomName, setRoomName] = useState("");
   const [roomCode, setRoomCode] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,17 +24,16 @@ function LobbyPage({ user, onLogout }: LobbyPageProps) {
   async function handleCreateRoom(event: React.FormEvent) {
     event.preventDefault();
     if (!roomName.trim()) {
-      setError("Ponele un nombre a la sala");
+      toast.error("Ponele un nombre a la sala");
       return;
     }
 
     setLoading(true);
-    setError("");
     try {
       const room = await createRoom(roomName.trim());
       navigate(`/room/${room.ID}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Algo salio mal");
+      toast.error(err instanceof Error ? err.message : "Algo salio mal");
     } finally {
       setLoading(false);
     }
@@ -43,17 +42,16 @@ function LobbyPage({ user, onLogout }: LobbyPageProps) {
   async function handleJoinRoom(event: React.FormEvent) {
     event.preventDefault();
     if (!roomCode.trim()) {
-      setError("Escribi el codigo de la sala");
+      toast.error("Escribi el codigo de la sala");
       return;
     }
 
     setLoading(true);
-    setError("");
     try {
       const room = await getRoom(roomCode.trim());
       navigate(`/room/${room.ID}`);
     } catch {
-      setError("No encontramos esa sala");
+      toast.error("No encontramos esa sala");
     } finally {
       setLoading(false);
     }
@@ -99,8 +97,6 @@ function LobbyPage({ user, onLogout }: LobbyPageProps) {
           </button>
         </form>
       </div>
-
-      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }

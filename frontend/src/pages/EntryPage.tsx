@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { getUserByName, createUser } from "../api.ts";
 import type { User } from "../types";
 
@@ -10,7 +11,6 @@ interface EntryPageProps {
 
 function EntryPage({ user, onLogin }: EntryPageProps) {
   const [name, setName] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,12 +25,11 @@ function EntryPage({ user, onLogin }: EntryPageProps) {
     event.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Escribi un nombre para entrar");
+      toast.error("Escribi un nombre para entrar");
       return;
     }
 
     setLoading(true);
-    setError("");
 
     try {
       // If the name already exists, reuse that user. Otherwise, create it.
@@ -43,7 +42,7 @@ function EntryPage({ user, onLogin }: EntryPageProps) {
       onLogin(foundUser);
       navigate("/lobby");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Algo salio mal");
+      toast.error(err instanceof Error ? err.message : "Algo salio mal");
     } finally {
       setLoading(false);
     }
@@ -70,8 +69,6 @@ function EntryPage({ user, onLogin }: EntryPageProps) {
             {loading ? "Entrando..." : "Entrar al campo"}
           </button>
         </form>
-
-        {error && <p className="error-text">{error}</p>}
       </div>
     </div>
   );
