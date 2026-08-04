@@ -3,7 +3,7 @@
 
 import type { User, Room, RankingEntry, Meme } from "./types";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4040/api/v1";
+const API_URL = import.meta.env.VITE_API_URL || "/api/v1";
 
 async function handleResponse<T>(response: Response): Promise<T> {
   const data = await response.json().catch(() => null);
